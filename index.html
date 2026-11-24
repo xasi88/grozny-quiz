@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b0714">
+<title>Grozny Quiz: игры, бронь, рейтинг</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0714; --bg2:#140d24; --card:#1b1230; --card2:#241940; --line:#34265a;
+  --violet:#8b6cf5; --violet2:#a993ff; --glow:rgba(139,108,245,.45);
+  --text:#f4f1ff; --muted:#a79cc7; --gold:#f5c542; --silver:#c9cfdc; --bronze:#d99560;
+  --green:#5fd39a; --red:#ff6b7a;
+  --r:20px; --tap:48px;
+  --head:'Unbounded',system-ui,sans-serif; --body:'Manrope',system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--text);font:500 16px/1.5 var(--body);
+  background-image:radial-gradient(900px 500px at 50% -120px,#2a1a55 0%,transparent 70%),linear-gradient(180deg,var(--bg) 0%,#120b22 60%,#1d1238 100%);
+  min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:560px;margin:0 auto;padding:0 18px}
+
+/* шапка */
+.top{position:sticky;top:0;z-index:20;background:rgba(11,7,20,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(139,108,245,.15)}
+.top .wrap{display:flex;align-items:center;gap:10px;height:60px}
+.mark{font:900 17px/1 var(--head);letter-spacing:.02em;color:var(--violet2);text-shadow:0 0 18px var(--glow);white-space:nowrap}
+.mark b{color:var(--text)}
+.nav{display:flex;gap:6px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:12px;color:var(--muted);text-decoration:none;font-weight:700;font-size:14px;white-space:nowrap}
+.nav a.on{color:var(--text);background:var(--card2)}
+
+/* первый экран */
+.hero{padding:34px 0 10px;text-align:center}
+.logo{display:inline-block;font:900 44px/.95 var(--head);color:var(--violet);letter-spacing:-.01em;
+  text-shadow:0 0 0 #000,3px 3px 0 #1a0f33,0 0 40px var(--glow);transform:rotate(-3deg);margin:6px 0 18px}
+.logo span{display:block;font-size:34px;margin-left:46px;color:var(--violet2)}
+.hero h1{font:700 22px/1.25 var(--head);margin:0 0 10px}
+.hero p{color:var(--muted);margin:0 auto 22px;max-width:400px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 22px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 6px}
+.stat b{display:block;font:700 20px/1.1 var(--head);color:var(--violet2)}
+.stat small{color:var(--muted);font-size:12px;line-height:1.2;display:block;margin-top:4px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:56px;border:0;border-radius:16px;
+  background:linear-gradient(180deg,#9b80ff,#7a5ae8);color:#fff;font:700 16px/1 var(--head);letter-spacing:.01em;
+  box-shadow:0 10px 30px -8px var(--glow),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .12s,filter .12s;text-decoration:none}
+.btn:active{transform:scale(.98);filter:brightness(.95)}
+.btn.ghost{background:var(--card2);box-shadow:none;border:1px solid var(--line);font-family:var(--body);font-weight:800}
+.btn[disabled]{opacity:.45;pointer-events:none}
+
+/* секции */
+section{padding:34px 0 6px}
+.h2{font:700 20px/1.2 var(--head);margin:0 0 6px;display:flex;align-items:center;gap:10px}
+.sub{color:var(--muted);margin:0 0 16px;font-size:15px}
+
+/* афиша */
+.games{display:grid;gap:12px}
+.game{display:grid;grid-template-columns:74px 1fr;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px;position:relative;overflow:hidden}
+.game::after{content:"";position:absolute;inset:auto -40px -60px auto;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 70%);opacity:.35;pointer-events:none}
+.date{background:var(--bg2);border:1px solid var(--line);border-radius:14px;text-align:center;padding:10px 4px;line-height:1.05}
+.date b{display:block;font:900 22px/1 var(--head);color:var(--violet2)}
+.date small{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.date.week b{font-size:13px;line-height:1.15}
+.game h3{margin:0 0 2px;font:700 15px/1.25 var(--head)}
+.game p{margin:0 0 10px;color:var(--muted);font-size:13.5px;line-height:1.35}
+.tag{display:inline-block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:rgba(139,108,245,.25);border:1px solid rgba(139,108,245,.5);padding:3px 8px;border-radius:8px;margin-bottom:6px}
+.tag.cup{background:rgba(245,197,66,.16);border-color:rgba(245,197,66,.5);color:var(--gold)}
+.game .btn{min-height:46px;font-size:14px;border-radius:13px}
+.seats{font-size:12.5px;color:var(--green);font-weight:700;margin:-4px 0 10px}
+
+/* рейтинг */
+.tabs{display:flex;gap:6px;background:var(--card);border:1px solid var(--line);padding:5px;border-radius:16px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:1 0 auto;min-height:44px;border:0;background:none;border-radius:12px;padding:0 14px;font-weight:800;font-size:14px;color:var(--muted);white-space:nowrap}
+.tabs button.on{background:var(--violet);color:#fff;box-shadow:0 6px 18px -6px var(--glow)}
+.board{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.board-h{padding:14px 16px 10px;display:flex;justify-content:space-between;align-items:baseline;gap:10px;border-bottom:1px solid var(--line)}
+.board-h b{font:700 15px/1.2 var(--head)}
+.board-h small{color:var(--muted);font-size:12.5px;text-align:right}
+.row{display:grid;grid-template-columns:40px 1fr auto 22px;align-items:center;gap:10px;width:100%;min-height:56px;padding:6px 14px;border:0;border-top:1px solid rgba(52,38,90,.6);background:none;text-align:left}
+.row:first-of-type{border-top:0}
+.row:active{background:var(--card2)}
+.pl{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font:700 14px/1 var(--head);background:var(--bg2);color:var(--muted)}
+.p1 .pl{background:linear-gradient(180deg,#ffe07a,#e0a91d);color:#2a1d00}
+.p2 .pl{background:linear-gradient(180deg,#eef1f7,#aab2c4);color:#1d2230}
+.p3 .pl{background:linear-gradient(180deg,#f0b588,#b86e38);color:#2b1404}
+.tn{font-weight:800;font-size:15px;line-height:1.2}
+.tn small{display:block;color:var(--muted);font-weight:600;font-size:12px;margin-top:2px}
+.sc{font:700 17px/1 var(--head)}
+.chev{color:var(--muted);font-size:18px;text-align:right}
+.bar{height:4px;border-radius:4px;background:var(--bg2);margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--violet),var(--violet2));border-radius:4px}
+.race{padding:16px}
+.race .vs{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;text-align:center;margin:6px 0 14px}
+.race .team{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:14px 8px}
+.race .team b{display:block;font:700 14px/1.2 var(--head)}
+.race .team small{color:var(--muted);font-size:12px}
+.race .team.lead{border-color:var(--gold);box-shadow:0 0 0 1px rgba(245,197,66,.25),0 10px 30px -14px rgba(245,197,66,.6)}
+.race .gap{font:900 26px/1 var(--head);color:var(--gold)}
+.race .gap small{display:block;font:700 11px/1 var(--body);color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.05em}
+.note{font-size:13.5px;color:var(--muted);background:var(--bg2);border-radius:14px;padding:12px 14px;margin:0}
+.legend{font-size:12px;color:var(--muted);padding:10px 16px 14px;border-top:1px solid var(--line)}
+
+/* ответы */
+.qa{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.qa .q{font:700 17px/1.35 var(--head);margin:6px 0 14px}
+.qa .a{display:none;border-top:1px dashed var(--line);margin-top:14px;padding-top:14px}
+.qa.open .a{display:block;animation:up .3s ease}
+.qa .a b{color:var(--violet2);font-family:var(--head)}
+.qa .a p{margin:8px 0 0;color:#ddd6f5;font-size:15px}
+@keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* франшиза */
+.fr{background:linear-gradient(160deg,#2a1a55,#171030);border:1px solid #4b3690;border-radius:var(--r);padding:22px 18px;position:relative;overflow:hidden}
+.fr h3{font:700 19px/1.25 var(--head);margin:0 0 8px}
+.fr ul{margin:0 0 18px;padding:0;list-style:none;display:grid;gap:8px}
+.fr li{padding-left:26px;position:relative;color:#ddd6f5;font-size:15px}
+.fr li::before{content:"";position:absolute;left:4px;top:8px;width:10px;height:10px;border-radius:3px;background:var(--violet);box-shadow:0 0 12px var(--glow)}
+
+footer{padding:36px 0 40px;color:var(--muted);font-size:14px;text-align:center}
+footer a{color:var(--violet2);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;min-height:44px;padding:0 6px}
+
+/* нижний лист */
+.scrim{position:fixed;inset:0;background:rgba(5,3,10,.6);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;transform:translateY(105%);transition:transform .28s cubic-bezier(.2,.8,.2,1);max-height:92vh;overflow:auto;
+  background:var(--bg2);border-top:1px solid var(--line);border-radius:24px 24px 0 0;padding:10px 0 calc(18px + env(safe-area-inset-bottom))}
+.open-sheet .scrim{opacity:1;pointer-events:auto}
+.sheet.on{transform:none}
+.grab{width:44px;height:5px;border-radius:5px;background:var(--line);margin:0 auto 12px}
+.sheet .wrap{max-width:520px}
+.sheet h3{font:700 19px/1.25 var(--head);margin:0 0 4px}
+.sheet .sub{margin-bottom:16px}
+.x{position:absolute;right:10px;top:8px;width:44px;height:44px;border:0;background:none;color:var(--muted);font-size:26px;line-height:1}
+label{display:block;font-weight:800;font-size:13.5px;color:var(--muted);margin:14px 0 6px}
+input,select{width:100%;min-height:52px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--text);font:600 16px var(--body);padding:0 14px;outline:none}
+input:focus,select:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(139,108,245,.25)}
+input::placeholder{color:#6f6491}
+.step{display:grid;grid-template-columns:52px 1fr 52px;gap:8px;align-items:center}
+.step button{height:52px;border-radius:14px;border:1px solid var(--line);background:var(--card);font:700 22px var(--head)}
+.step output{text-align:center;font:700 22px var(--head)}
+.err{color:var(--red);font-size:13px;font-weight:700;margin:6px 0 0;min-height:1em}
+.done{text-align:center;padding:10px 0 4px}
+.done .ok{width:64px;height:64px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;background:rgba(95,211,154,.15);color:var(--green);font-size:32px}
+.pre{white-space:pre-wrap;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:14px;text-align:left;color:#ddd6f5;margin:12px 0 14px}
+.rounds{display:grid;gap:8px;margin:14px 0 4px}
+.rd{display:grid;grid-template-columns:1fr 44px;gap:10px;align-items:center;font-size:14px}
+.rd span{color:var(--muted);font-weight:700}
+.rd .bar{height:8px;margin:4px 0 0}
+.rd b{text-align:right;font-family:var(--head);font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.kpis div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 6px;text-align:center}
+.kpis b{display:block;font:700 18px/1.1 var(--head)}
+.kpis small{color:var(--muted);font-size:11.5px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,140%);background:var(--card2);border:1px solid var(--line);padding:12px 16px;border-radius:14px;font-weight:700;font-size:14px;z-index:60;transition:transform .25s;max-width:92vw;text-align:center}
+.toast.on{transform:translate(-50%,0)}
+@media (min-width:700px){.logo{font-size:56px}.logo span{font-size:42px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="mark">GROZNY <b>QUIZ</b></div>
+    <nav class="nav" id="nav">
+      <a href="#afisha" class="on">Афиша</a>
+      <a href="#reiting">Рейтинг</a>
+      <a href="#otvety">Ответы</a>
+      <a href="#franshiza">Франшиза</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <div class="logo" aria-hidden="true">GROZNY<span>QUIZ</span></div>
+    <h1>Лучший способ провести время</h1>
+    <p>Командная интеллектуальная игра в Грозном. Ул. Поповича, 26.</p>
+    <div class="stats">
+      <div class="stat"><b>169</b><small>игровых недель</small></div>
+      <div class="stat"><b>12,8K</b><small>подписчиков</small></div>
+      <div class="stat"><b>5</b><small>игр в ноябре</small></div>
+    </div>
+    <button class="btn" data-book="">Забронировать стол</button>
+  </div>
+
+  <section id="afisha">
+    <h2 class="h2">Афиша</h2>
+    <p class="sub">Выберите игру и забронируйте стол для команды.</p>
+    <div class="games" id="games"></div>
+  </section>
+
+  <section id="reiting">
+    <h2 class="h2">Рейтинг</h2>
+    <p class="sub">Нажмите на команду: откроются очки по раундам.</p>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div id="board"></div>
+  </section>
+
+  <section id="otvety">
+    <h2 class="h2">Ответы после игры</h2>
+    <p class="sub">Вопрос, о котором спорили после игры. Сначала подумайте сами.</p>
+    <div class="qa" id="qa">
+      <span class="tag">Игра 169 · MVP</span>
+      <div class="q">Что такое «петля Примакова»?</div>
+      <button class="btn ghost" id="qaBtn">Показать ответ</button>
+      <div class="a">
+        <b>Разворот самолёта над Атлантикой</b>
+        <p>24 марта 1999 года Евгений Примаков летел с официальным визитом в Вашингтон. Над Атлантическим океаном он узнал о начале бомбардировок Югославии силами НАТО и приказал развернуть самолёт обратно в Москву. Этот политический демарш вошёл в историю как «петля Примакова».</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="franshiza">
+    <div class="fr">
+      <span class="tag">Франшиза</span>
+      <h3>Grozny Quiz в вашем городе</h3>
+      <ul>
+        <li>169 недель игр и своя система лиг и кубков</li>
+        <li>Готовая онлайн-бронь и рейтинг команд для вашего города</li>
+        <li>Форматы: общая тематика, футбольный квиз, кубки, игры для новичков</li>
+      </ul>
+      <a class="btn" href="tel:+79633959447">Позвонить: +7 963 395-94-47</a>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  Грозный, ул. Поповича, 26<br>
+  <a href="https://www.instagram.com/groznyquiz/" target="_blank" rel="noopener">Instagram @groznyquiz</a>
+</footer>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+  <div class="grab"></div>
+  <button class="x" id="close" aria-label="Закрыть">×</button>
+  <div class="wrap" id="sheetBody"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const IG = 'groznyquiz';
+const GAMES = [
+  {id:'rajony', d:'26', m:'ноября', title:'Кубок «Районы»', text:'Кубковая игра. Команды районов Грозного.', tag:'Кубок', cup:true},
+  {id:'chgu', d:'27-28', m:'ноября', title:'Игра в ЧГУ', text:'Выездная игра в Чеченском государственном университете.', tag:'Выезд'},
+  {id:'osen', d:'29', m:'ноября', title:'Осенний кубок', text:'Финал осеннего кубка. Решается, кто заберёт трофей.', tag:'Кубок', cup:true},
+  {id:'reborn', week:'Каждый четверг', title:'REBORN', text:'Игра для новых команд. Лучший старт, если вы первый раз.', tag:'Новичкам'},
+  {id:'sunday', week:'Каждое воскресенье', title:'Grozny Quiz', text:'Квиз на общую тематику. Главная игра недели.', tag:'Каждую неделю'}
+];
+
+// Настоящие итоги из постов @groznyquiz
+const R169 = ['И/Л','С','?','П.Р.','И','5','6','7'];
+const R_SC = ['1','?','3','П.Р.','4','5','6'];
+const TABLES = {
+  week:{tab:'Неделя #169', title:'169-я игровая неделя', note:'Титульный спонсор Govza', rounds:R169, legend:'И/Л: история и литература · С: спорт · ?: тайный раунд · П.Р.: промежуточный результат · И: ислам',
+    rows:[
+      ['Светлое общество',[2,3.5,4,9.5,2,3,1.5,3.5],19.5,.5,20],
+      ['Мозговой трест',[.5,4,0,4.5,4,2,1,2.5],14,0,14],
+      ['ТОП',[1.5,4,2,7.5,4,0,.5,2],14,0,14],
+      ['Диванные эксперты',[1,4,1,6,2,1,1,1.5],11.5,0,11.5],
+      ['Любители кофе',[1,2.5,1,4.5,2.5,1,1,1.5],10.5,0,10.5]
+    ]},
+  gold:{tab:'Золотой суперкубок', title:'Super Cup #17 · игра 1', note:'Титульный спонсор inzare', rounds:R_SC,
+    rows:[
+      ['Аилтон в подкате',[4,3,3,10,4,3,2],19,3,22],
+      ['СШК',[4,4,3,11,3,4,2],20,0,20],
+      ['ТТД Бубнова',[3.5,4,3,10.5,4.5,5,2.5],22.5,-3,19.5],
+      ['Светлое общество',[4,4,3,11,3,2,2],18,0,18],
+      ['Челси до Абрамовича',[4.5,3,3,10.5,1,3,1.5],16,0,16],
+      ['Паненка',[3.5,2,2,7.5,4,4,2],17.5,-3,14.5],
+      ['Алды',[2.5,3,3,8.5,2,2,1.5],14,0,14],
+      ['Дриблинг Арбелоа 90+3',[5,1,3,9,2,4,2],17,-3,14],
+      ['Never Quiz',[4,1,3,8,4,3,2],17,-3,14],
+      ['Футбол на Куличках',[4,3,3,10,2,2,1],15,-3,12]
+    ]},
+  silver:{tab:'Серебряный кубок', title:'Super Cup #17 · игра 2', note:'Титульный спонсор inzare', rounds:R_SC,
+    rows:[
+      ['Как Тоттенхэм',[5,1,3,9,2,5,2],18,3,21],
+      ['Соьлжа ГӀала',[3,4,3,10,3,2,2],17,1,18],
+      ['Эль Классико',[3,2,2,7,2.5,3,0],12.5,2,14.5],
+      ['20 куян',[3,3,1,7,2.5,4,0],13.5,0,13.5],
+      ['Ферги Тайм',[1,1,1,3,2,1,1],7,0,7]
+    ]},
+  autumn:{tab:'Осенний кубок', race:true}
+};
+const TAB_ORDER = ['autumn','week','gold','silver'];
+
+const $ = s => document.querySelector(s);
+const num = n => String(n).replace('.', ',');
+
+/* афиша */
+$('#games').innerHTML = GAMES.map(g => `
+  <article class="game">
+    <div class="date ${g.week?'week':''}">${g.week?`<b>${g.week.replace(' ','<br>')}</b>`:`<b>${g.d}</b><small>${g.m}</small>`}</div>
+    <div>
+      <span class="tag ${g.cup?'cup':''}">${g.tag}</span>
+      <h3>${g.title}</h3>
+      <p>${g.text}</p>
+      ${g.seats?`<div class="seats">● ${g.seats}</div>`:''}
+      <button class="btn" data-book="${g.id}">Забронировать</button>
+    </div>
+  </article>`).join('');
+
+/* рейтинг */
+let cur = 'autumn';
+function drawTabs(){
+  $('#tabs').innerHTML = TAB_ORDER.map(k => `<button role="tab" class="${k===cur?'on':''}" data-tab="${k}" aria-selected="${k===cur}">${TABLES[k].tab}</button>`).join('');
+}
+function drawBoard(){
+  const t = TABLES[cur];
+  if (t.race){
+    $('#board').innerHTML = `<div class="board race">
+      <div class="board-h" style="padding:0 0 10px;border:0"><b>Гонка за осенний кубок</b><small>после 169-й недели</small></div>
+      <div class="vs">
+        <div class="team lead"><b>Светлое общество</b><small>лидер</small></div>
+        <div class="gap">+4<small>балла</small></div>
+        <div class="team"><b>Мозговой трест</b><small>2 место</small></div>
+      </div>
+      <p class="note">До игры «Мозговой трест» вёл с отрывом в 2 балла. На 169-й неделе «Светлое общество» набрало 20 и ушло вперёд на 4. Финал осеннего кубка 29 ноября.</p>
+    </div>`;
+    return;
+  }
+  const max = Math.max(...t.rows.map(r => r[4]));
+  $('#board').innerHTML = `<div class="board">
+    <div class="board-h"><b>${t.title}</b><small>${t.note}</small></div>
+    ${t.rows.map((r,i) => `<button class="row ${i<3?'p'+(i+1):''}" data-team="${i}">
+      <span class="pl">${i+1}</span>
+      <span class="tn">${r[0]}<div class="bar"><i style="width:${Math.round(r[4]/max*100)}%"></i></div></span>
+      <span class="sc">${num(r[4])}</span>
+      <span class="chev">›</span>
+    </button>`).join('')}
+    ${t.legend?`<div class="legend">${t.legend}</div>`:''}
+  </div>`;
+}
+$('#tabs').addEventListener('click', e => {
+  const b = e.target.closest('[data-tab]'); if(!b) return;
+  cur = b.dataset.tab; drawTabs(); drawBoard();
+});
+$('#board').addEventListener('click', e => {
+  const b = e.target.closest('[data-team]'); if(!b) return;
+  teamSheet(TABLES[cur], +b.dataset.team);
+});
+drawTabs(); drawBoard();
+
+/* ответ */
+$('#qaBtn').addEventListener('click', () => {
+  const q = $('#qa'); q.classList.toggle('open');
+  $('#qaBtn').textContent = q.classList.contains('open') ? 'Скрыть ответ' : 'Показать ответ';
+});
+
+/* нижний лист */
+const sheet = $('#sheet');
+function openSheet(html){
+  $('#sheetBody').innerHTML = html;
+  document.body.classList.add('open-sheet'); sheet.classList.add('on');
+}
+function closeSheet(){ document.body.classList.remove('open-sheet'); sheet.classList.remove('on'); }
+$('#scrim').addEventListener('click', closeSheet);
+$('#close').addEventListener('click', closeSheet);
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeSheet(); });
+
+function teamSheet(t, i){
+  const r = t.rows[i], maxR = Math.max(...t.rows.flatMap(x => x[1].filter((_,k)=>t.rounds[k]!=='П.Р.')));
+  openSheet(`
+    <span class="tag">${t.title}</span>
+    <h3>${r[0]}</h3>
+    <div class="kpis">
+      <div><b>${i+1}</b><small>место</small></div>
+      <div><b>${num(r[4])}</b><small>итог игры</small></div>
+      <div><b style="color:${r[3]<0?'var(--red)':r[3]>0?'var(--green)':'inherit'}">${r[3]>0?'+':''}${num(r[3])}</b><small>ставка +/-</small></div>
+    </div>
+    <div class="rounds">${r[1].map((v,k)=> t.rounds[k]==='П.Р.' ? '' : `
+      <div class="rd"><div><span>Раунд ${t.rounds[k]}</span><div class="bar"><i style="width:${Math.round(v/maxR*100)}%"></i></div></div><b>${num(v)}</b></div>`).join('')}
+    </div>
+    <p class="note" style="margin-top:14px">Здесь будет вся история команды: игры, места, кубки за сезон.</p>
+    <div style="height:14px"></div>
+    <button class="btn" data-book="">Забронировать стол на игру</button>`);
+}
+
+/* бронь */
+let players = 6;
+function bookSheet(gid){
+  players = +(localStorage.getItem('gq-players')||6);
+  if (!(players>=2 && players<=10)) players = 6;
+  const team = localStorage.getItem('gq-team')||'';
+  openSheet(`
+    <h3>Бронь стола</h3>
+    <p class="sub">Заявка уйдёт организаторам в директ Instagram.</p>
+    <label for="bGame">Игра</label>
+    <select id="bGame">${GAMES.map(g=>`<option value="${g.id}" ${g.id===gid?'selected':''}>${g.week?g.week:g.d+' '+g.m}: ${g.title}</option>`).join('')}</select>
+    <label for="bTeam">Название команды</label>
+    <input id="bTeam" placeholder="Например, Светлое общество" value="${team.replace(/"/g,'&quot;')}" autocomplete="off">
+    <label>Сколько игроков</label>
+    <div class="step"><button type="button" id="minus" aria-label="Меньше">−</button><output id="pl">${players}</output><button type="button" id="plus" aria-label="Больше">+</button></div>
+    <label for="bName">Капитан</label>
+    <input id="bName" placeholder="Имя" autocomplete="given-name">
+    <p class="err" id="err"></p>
+    <button class="btn" id="send">Отправить заявку</button>`);
+  $('#minus').onclick = () => { players = Math.max(2, players-1); $('#pl').textContent = players; };
+  $('#plus').onclick  = () => { players = Math.min(10, players+1); $('#pl').textContent = players; };
+  $('#send').onclick = sendBooking;
+}
+async function sendBooking(){
+  const team = $('#bTeam').value.trim(), name = $('#bName').value.trim();
+  const g = GAMES.find(x => x.id === $('#bGame').value);
+  if (!team){ $('#err').textContent = 'Напишите название команды'; $('#bTeam').focus(); return; }
+  $('#err').textContent = '';
+  localStorage.setItem('gq-team', team); localStorage.setItem('gq-players', players);
+  const when = g.week ? g.week : g.d + ' ' + g.m;
+  const msg = `Бронь стола\nИгра: ${g.title} (${when})\nКоманда: ${team}\nИгроков: ${players}` + (name ? `\nКапитан: ${name}` : '');
+  let copied = false;
+  try { await navigator.clipboard.writeText(msg); copied = true; } catch(e) {}
+  openSheet(`
+    <div class="done">
+      <div class="ok">✓</div>
+      <h3>Заявка готова</h3>
+      <p class="sub">${copied ? 'Текст уже скопирован. Откройте директ и вставьте его.' : 'Скопируйте текст и отправьте его в директ.'}</p>
+    </div>
+    <div class="pre">${msg.replace(/</g,'&lt;')}</div>
+    <a class="btn" href="https://ig.me/m/${IG}" target="_blank" rel="noopener">Открыть директ @${IG}</a>
+    <div style="height:10px"></div>
+    <button class="btn ghost" id="again">Готово</button>`);
+  $('#again').onclick = closeSheet;
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-book]'); if(!b) return;
+  e.preventDefault(); bookSheet(b.dataset.book || GAMES[0].id);
+});
+
+/* подсветка меню */
+const links = [...document.querySelectorAll('#nav a')];
+const io = new IntersectionObserver(es => es.forEach(en => {
+  if (en.isIntersecting) links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#'+en.target.id));
+}), {rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('main section').forEach(s => io.observe(s));
+</script>
+</body>
+</html>
