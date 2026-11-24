@@ -159,7 +159,65 @@ input::placeholder{color:#6f6491}
 .kpis small{color:var(--muted);font-size:11.5px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,140%);background:var(--card2);border:1px solid var(--line);padding:12px 16px;border-radius:14px;font-weight:700;font-size:14px;z-index:60;transition:transform .25s;max-width:92vw;text-align:center}
 .toast.on{transform:translate(-50%,0)}
-@media (min-width:700px){.logo{font-size:56px}.logo span{font-size:42px}}
+/* знак в шапке */
+.mark{display:flex;align-items:center;gap:10px;text-decoration:none;min-height:44px}
+.mark img{width:46px;height:36px;object-fit:cover;border-radius:10px;box-shadow:0 0 18px -4px var(--glow)}
+.topbtn{display:none}
+
+/* первый экран: коллаж из их афиши */
+.hero{padding:22px 0 8px;text-align:center}
+.collage{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 22px}
+.collage img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:16px;border:2px solid rgba(139,108,245,.55);box-shadow:0 0 24px -8px var(--glow);filter:saturate(.9) brightness(.85)}
+.collage .clogo{position:absolute;left:50%;top:50%;width:48%;aspect-ratio:auto;height:auto;transform:translate(-50%,-50%) rotate(-4deg);border:0;border-radius:40%;background:transparent;filter:drop-shadow(0 10px 30px rgba(0,0,0,.6)) drop-shadow(0 0 30px var(--glow));mix-blend-mode:normal;-webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 78%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 78%,transparent 100%)}
+
+/* карточки игр с фото */
+.games{display:grid;gap:14px}
+.game{display:flex;flex-direction:column;padding:0;grid-template-columns:none}
+.pic{position:relative;aspect-ratio:2/1;overflow:hidden;border-bottom:1px solid var(--line)}
+.pic img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.game:hover .pic img{transform:scale(1.04)}
+.pic::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(11,7,20,.75))}
+.art{height:100%;display:grid;place-items:center;text-align:center;font:900 24px/1.1 var(--head);color:#fff;letter-spacing:.01em;padding:0 20px}
+.pic.teal{background:radial-gradient(120% 120% at 50% 0%,#1f6f86,#0c2430 70%)}
+.pic.blue{background:radial-gradient(120% 120% at 50% 0%,#2c4fb8,#0d1640 70%)}
+.chip{position:absolute;left:12px;bottom:12px;z-index:1;background:#fff;color:#120b22;font:800 13px/1 var(--head);padding:8px 10px;border-radius:9px;text-transform:uppercase;letter-spacing:.02em}
+.gbody{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1}
+.gbody p{flex:1}
+
+/* планшет */
+@media (min-width:700px){
+  .wrap{max-width:900px;padding:0 28px}
+  .hero{padding-top:34px}
+  .collage{max-width:640px;margin:0 auto 26px}
+  .hero-text{max-width:560px;margin:0 auto}
+  .games{grid-template-columns:1fr 1fr;gap:16px}
+  .hero h1{font-size:30px}
+  .sheet{left:50%;right:auto;width:min(560px,100%);transform:translate(-50%,105%)}
+  .sheet.on{transform:translate(-50%,0)}
+}
+/* компьютер */
+@media (min-width:1100px){
+  .wrap{max-width:1200px;padding:0 40px}
+  .top .wrap{height:72px}
+  .nav{margin-left:auto}
+  .nav a{font-size:15px}
+  .topbtn{display:flex;width:auto;min-height:46px;padding:0 20px;font-size:14px;border-radius:13px;margin-left:8px}
+  .hero{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center;text-align:left;padding:56px 0 20px}
+  .collage{order:2;max-width:none;margin:0}
+  .hero-text{max-width:none;margin:0}
+  .hero h1{font-size:44px;line-height:1.1}
+  .hero p{margin-left:0;font-size:18px}
+  .hero .btn{width:auto;padding:0 34px;display:inline-flex}
+  .games{grid-template-columns:repeat(3,1fr);gap:20px}
+  .duo{display:grid;grid-template-columns:1.35fr 1fr;gap:36px;align-items:start}
+  .side{position:sticky;top:90px}
+  .h2{font-size:26px}
+  section{padding-top:48px}
+  /* на компьютере окно по центру экрана */
+  .sheet{top:50%;bottom:auto;border-radius:24px;border:1px solid var(--line);max-height:88vh;opacity:0;pointer-events:none;transform:translate(-50%,-46%);transition:transform .25s,opacity .2s}
+  .sheet.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%)}
+  .grab{display:none}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -167,19 +225,27 @@ input::placeholder{color:#6f6491}
 
 <header class="top">
   <div class="wrap">
-    <div class="mark">GROZNY <b>QUIZ</b></div>
+    <a class="mark" href="#" aria-label="Grozny Quiz"><img src="img/logo.jpg" alt="" width="343" height="271"><span>GROZNY <b>QUIZ</b></span></a>
     <nav class="nav" id="nav">
       <a href="#afisha" class="on">Афиша</a>
       <a href="#reiting">Рейтинг</a>
       <a href="#otvety">Ответы</a>
       <a href="#franshiza">Франшиза</a>
     </nav>
+    <button class="btn topbtn" data-book="">Забронировать</button>
   </div>
 </header>
 
 <main class="wrap">
   <div class="hero">
-    <div class="logo" aria-hidden="true">GROZNY<span>QUIZ</span></div>
+   <div class="collage" aria-hidden="true">
+     <img src="img/futbol.jpg" alt="" width="1000" height="474">
+     <img src="img/rajony.jpg" alt="" width="1000" height="458">
+     <img src="img/chgu.jpg" alt="" width="1000" height="502">
+     <img src="img/kubok.jpg" alt="" width="1000" height="511">
+     <img class="clogo" src="img/logo.jpg" alt="" width="343" height="271">
+   </div>
+   <div class="hero-text">
     <h1>Лучший способ провести время</h1>
     <p>Командная интеллектуальная игра в Грозном. Ул. Поповича, 26.</p>
     <div class="stats">
@@ -188,6 +254,7 @@ input::placeholder{color:#6f6491}
       <div class="stat"><b>5</b><small>игр в ноябре</small></div>
     </div>
     <button class="btn" data-book="">Забронировать стол</button>
+   </div>
   </div>
 
   <section id="afisha">
@@ -196,6 +263,7 @@ input::placeholder{color:#6f6491}
     <div class="games" id="games"></div>
   </section>
 
+ <div class="duo">
   <section id="reiting">
     <h2 class="h2">Рейтинг</h2>
     <p class="sub">Нажмите на команду: откроются очки по раундам.</p>
@@ -203,6 +271,7 @@ input::placeholder{color:#6f6491}
     <div id="board"></div>
   </section>
 
+  <div class="side">
   <section id="otvety">
     <h2 class="h2">Ответы после игры</h2>
     <p class="sub">Вопрос, о котором спорили после игры. Сначала подумайте сами.</p>
@@ -229,6 +298,8 @@ input::placeholder{color:#6f6491}
       <a class="btn" href="tel:+79633959447">Позвонить: +7 963 395-94-47</a>
     </div>
   </section>
+  </div>
+ </div>
 </main>
 
 <footer class="wrap">
@@ -247,11 +318,12 @@ input::placeholder{color:#6f6491}
 <script>
 const IG = 'groznyquiz';
 const GAMES = [
-  {id:'rajony', d:'26', m:'ноября', title:'Кубок «Районы»', text:'Кубковая игра. Команды районов Грозного.', tag:'Кубок', cup:true},
-  {id:'chgu', d:'27-28', m:'ноября', title:'Игра в ЧГУ', text:'Выездная игра в Чеченском государственном университете.', tag:'Выезд'},
-  {id:'osen', d:'29', m:'ноября', title:'Осенний кубок', text:'Финал осеннего кубка. Решается, кто заберёт трофей.', tag:'Кубок', cup:true},
-  {id:'reborn', week:'Каждый четверг', title:'REBORN', text:'Игра для новых команд. Лучший старт, если вы первый раз.', tag:'Новичкам'},
-  {id:'sunday', week:'Каждое воскресенье', title:'Grozny Quiz', text:'Квиз на общую тематику. Главная игра недели.', tag:'Каждую неделю'}
+  {id:'rajony', d:'26', m:'ноября', title:'Кубок «Районы»', text:'Кубковая игра. Команды районов Грозного.', tag:'Кубок', cup:true, img:'rajony'},
+  {id:'chgu', d:'27-28', m:'ноября', title:'Игра в ЧГУ', text:'Выездная игра в Чеченском государственном университете.', tag:'Выезд', img:'chgu'},
+  {id:'osen', d:'29', m:'ноября', title:'Осенний кубок', text:'Финал осеннего кубка. Решается, кто заберёт трофей.', tag:'Кубок', cup:true, img:'kubok'},
+  {id:'reborn', week:'Каждый четверг', title:'REBORN', text:'Игра для новых команд. Лучший старт, если вы первый раз.', tag:'Новичкам', art:'teal', artText:'НОВЫЕ<br>КОМАНДЫ'},
+  {id:'sunday', week:'Каждое воскресенье', title:'Grozny Quiz', text:'Квиз на общую тематику. Главная игра недели.', tag:'Каждую неделю', art:'blue', artText:'КВИЗ НА ОБЩУЮ<br>ТЕМАТИКУ'},
+  {id:'futbol', week:'По анонсу', title:'Футбольный квиз', text:'Для тех, кто живёт футболом. Даты в Instagram.', tag:'Тематический', img:'futbol'}
 ];
 
 // Настоящие итоги из постов @groznyquiz
@@ -297,12 +369,14 @@ const num = n => String(n).replace('.', ',');
 /* афиша */
 $('#games').innerHTML = GAMES.map(g => `
   <article class="game">
-    <div class="date ${g.week?'week':''}">${g.week?`<b>${g.week.replace(' ','<br>')}</b>`:`<b>${g.d}</b><small>${g.m}</small>`}</div>
-    <div>
+    <div class="pic ${g.art||''}">
+      ${g.img?`<img src="img/${g.img}.jpg" alt="" loading="lazy" width="1000" height="500">`:`<div class="art">${g.artText}</div>`}
+      <div class="chip">${g.week?g.week:`${g.d} ${g.m}`}</div>
+    </div>
+    <div class="gbody">
       <span class="tag ${g.cup?'cup':''}">${g.tag}</span>
       <h3>${g.title}</h3>
       <p>${g.text}</p>
-      ${g.seats?`<div class="seats">● ${g.seats}</div>`:''}
       <button class="btn" data-book="${g.id}">Забронировать</button>
     </div>
   </article>`).join('');
